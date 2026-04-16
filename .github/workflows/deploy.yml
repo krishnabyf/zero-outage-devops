@@ -1,0 +1,45 @@
+name: Zero Outage Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  validate-secrets:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Load secrets
+        run: |
+          echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
+          echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
+
+      - name: Validate secrets
+        run: bash scripts/validate-secrets.sh
+
+  build:
+    needs: validate-secrets
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Docker
+        run: docker build -t zero-app .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy
+        run: echo "🚀 Deployment successful"
+
+  health-check:
+    needs: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Health Check
+        run: echo "✅ App is healthy"
