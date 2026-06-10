@@ -20,6 +20,17 @@ It is built to solve real-world problems like:
 * Broken deployments reaching production
 * Unstable staging environments
 
+## Published Container
+
+```bash
+docker pull ghcr.io/krishnabyf/zero-outage-devops:1.0.0
+docker run --rm -p 3000:3000 \
+  -e API_KEY=replace-with-a-secret \
+  ghcr.io/krishnabyf/zero-outage-devops:1.0.0
+```
+
+Open `http://localhost:3000/health`.
+
 ---
 
 # 🧱 Architecture
